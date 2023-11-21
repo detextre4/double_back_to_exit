@@ -1,39 +1,52 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# double_back_to_exit
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+[![Pub](https://img.shields.io/pub/v/double_back_to_exit.svg)](https://pub.dev/packages/double_back_to_exit)
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A Flutter package that provides a widget to implement the double back press to exit functionality in your app.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Implements the double back press to exit functionality.
+- Works on both Android and iOS.
+- Customizable snackbar message.
+- Customizable duration between back presses.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+In your Flutter project, add the `double_back_to_exit` dependency to your `pubspec.yaml` file:
+
+```
+dependencies: 
+  double_back_to_exit: ^1.0.0
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Import the package in your Dart file:
 
-```dart
-const like = 'sample';
+`import 'package:double_back_to_exit/double_back_to_exit.dart';`
+
+Wrap your main widget with the `DoubleBackToExitWidget`:
+
 ```
+DoubleBackToExitWidget( 
+  snackBarMessage: 'Press back again to exit', 
+  child: MaterialApp( 
+    // Your app content here 
+  ), 
+)
+```
+
+## Example
+
+For a complete example, see the [example](https://github.com/example/example) folder.
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+For more information, check out the [documentation](https://pub.dev/documentation/double_back_to_exit/latest/double_back_to_exit/double_back_to_exit-library.html).
+
+If you find any issues or would like to contribute, please visit the [GitHub repository](https://github.com/example/example).
+
+## License
+
+This package is licensed under the [MIT License](https://opensource.org/licenses/MIT).
