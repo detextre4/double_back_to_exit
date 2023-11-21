@@ -15,7 +15,7 @@ A Flutter package that provides a widget to implement the double back press to e
 
 In your Flutter project, add the `double_back_to_exit` dependency to your `pubspec.yaml` file:
 
-```
+```yaml
 dependencies: 
   double_back_to_exit: ^1.0.0
 ```
@@ -28,7 +28,7 @@ Import the package in your Dart file:
 
 Wrap your main widget with the `DoubleBackToExitWidget`:
 
-```
+```dart
 DoubleBackToExitWidget( 
   snackBarMessage: 'Press back again to exit', 
   child: MaterialApp( 
