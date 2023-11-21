@@ -8,7 +8,7 @@ void main() {
     // Build the widget
     await tester.pumpWidget(
       MaterialApp(
-        home: DoubleBackToExitWidget(
+        home: DoubleBackToExit(
           snackBarMessage: 'Press back again to exit',
           child: Container(),
         ),
@@ -29,7 +29,7 @@ void main() {
     // Build the widget
     await tester.pumpWidget(
       MaterialApp(
-        home: DoubleBackToExitWidget(
+        home: DoubleBackToExit(
           snackBarMessage: 'Press back again to exit',
           onDoubleBack: () {
             onDoubleBackCalled = true;
