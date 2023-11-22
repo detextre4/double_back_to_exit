@@ -14,3 +14,4 @@
 ## 1.0.3
 
 * updated flutter sdk
+* added custom colors
