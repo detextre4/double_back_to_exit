@@ -43,8 +43,7 @@ class _DoubleBackToCloseMobileState extends State<DoubleBackToExitWidget> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(widget.snackBarMessage, style: widget.textStyle),
           duration: widget.doubleBackDuration,
-          backgroundColor: widget.backgroundColor ??
-              Theme.of(context).snackBarTheme.backgroundColor,
+          backgroundColor: widget.backgroundColor,
         ));
         return false;
       }
