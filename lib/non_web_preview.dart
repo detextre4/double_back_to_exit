@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' as io;
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +11,15 @@ class DoubleBackToExitWidget extends StatefulWidget {
     required this.child,
     this.onDoubleBack,
     this.doubleBackDuration = const Duration(milliseconds: 1350),
+    this.textStyle,
+    this.backgroundColor,
   });
   final Widget child;
   final String snackBarMessage;
   final FutureOr<bool> Function()? onDoubleBack;
   final Duration doubleBackDuration;
+  final TextStyle? textStyle;
+  final Color? backgroundColor;
 
   @override
   State<DoubleBackToExitWidget> createState() =>
@@ -37,9 +41,10 @@ class _DoubleBackToCloseMobileState extends State<DoubleBackToExitWidget> {
           now.difference(currentBackPressTime!) > widget.doubleBackDuration) {
         currentBackPressTime = now;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(widget.snackBarMessage),
+          content: Text(widget.snackBarMessage, style: widget.textStyle),
           duration: widget.doubleBackDuration,
-          backgroundColor: Colors.black54,
+          backgroundColor: widget.backgroundColor ??
+              Theme.of(context).snackBarTheme.backgroundColor,
         ));
         return false;
       }
@@ -50,7 +55,7 @@ class _DoubleBackToCloseMobileState extends State<DoubleBackToExitWidget> {
     }
 
     // * Android
-    if (io.Platform.isAndroid) {
+    if (Platform.isAndroid) {
       return WillPopScope(
         onWillPop: onWillPop,
         child: widget.child,
