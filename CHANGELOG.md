@@ -14,4 +14,4 @@
 ## 1.0.3
 
 * updated flutter sdk
-* added custom colors
+* added custom colors and properties to snackbar
