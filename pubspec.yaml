@@ -1,6 +1,6 @@
 name: double_back_to_exit
 description: A Flutter package that provides a widget to implement a double back press to close functionality in Flutter applications. Works seamlessly on Android and iOS platforms without any conflicts with web.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/detextre4/double_back_to_exit
 
 environment:

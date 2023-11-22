@@ -10,3 +10,7 @@
 ## 1.0.2
 
 * fixing snackbarMessage on web
+
+## 1.0.3
+
+* updated flutter sdk
