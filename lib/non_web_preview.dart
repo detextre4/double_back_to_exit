@@ -11,15 +11,25 @@ class DoubleBackToExitWidget extends StatefulWidget {
     required this.child,
     this.onDoubleBack,
     this.doubleBackDuration = const Duration(milliseconds: 1350),
+    this.textAlign = TextAlign.center,
     this.textStyle,
-    this.backgroundColor,
+    this.backgroundColor = Colors.black54,
+    this.behavior,
+    this.margin,
+    this.padding,
+    this.width,
   });
   final Widget child;
   final String snackBarMessage;
   final FutureOr<bool> Function()? onDoubleBack;
   final Duration doubleBackDuration;
   final TextStyle? textStyle;
-  final Color? backgroundColor;
+  final TextAlign textAlign;
+  final Color backgroundColor;
+  final SnackBarBehavior? behavior;
+  final EdgeInsets? margin;
+  final EdgeInsetsGeometry? padding;
+  final double? width;
 
   @override
   State<DoubleBackToExitWidget> createState() =>
@@ -41,9 +51,21 @@ class _DoubleBackToCloseMobileState extends State<DoubleBackToExitWidget> {
           now.difference(currentBackPressTime!) > widget.doubleBackDuration) {
         currentBackPressTime = now;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(widget.snackBarMessage, style: widget.textStyle),
+          content: Text(
+            widget.snackBarMessage,
+            textAlign: widget.textAlign,
+            style: widget.textStyle ??
+                Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+          ),
           duration: widget.doubleBackDuration,
           backgroundColor: widget.backgroundColor,
+          behavior: widget.behavior,
+          margin: widget.margin,
+          padding: widget.padding,
+          width: widget.width,
         ));
         return false;
       }
