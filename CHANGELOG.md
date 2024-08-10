@@ -15,3 +15,8 @@
 
 * updated flutter sdk
 * added custom colors and properties to snackbar
+
+## 1.1.0
+
+* boolean to enable widget
+* fixed configuration parameters
