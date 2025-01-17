@@ -10,6 +10,7 @@ A Flutter package that provides a widget to implement the double back press to e
 - Works on both Android and iOS.
 - Customizable snackbar message.
 - Customizable duration between back presses.
+- Allows conditional exit on iOS.
 
 ## Getting started
 
@@ -29,7 +30,7 @@ Import the package in your Dart file:
 Wrap your main widget with the `DoubleBackToExitWidget`:
 
 ```dart
-DoubleBackToExitWidget( 
+DoubleBackToExitWidget(
   snackBarMessage: 'Press back again to exit', 
   child: MaterialApp( 
     // Your app content here 

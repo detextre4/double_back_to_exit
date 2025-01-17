@@ -33,7 +33,6 @@ void main() {
           snackBarMessage: 'Press back again to exit',
           onDoubleBack: () {
             onDoubleBackCalled = true;
-            return Future.value(true);
           },
           child: Container(),
         ),

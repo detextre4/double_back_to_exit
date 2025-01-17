@@ -20,3 +20,8 @@
 
 * boolean to enable widget
 * fixed configuration parameters
+
+## 1.1.0
+
+* updated flutter sdk version (3.27.2)
+* added `bool` check if to allow exit app on IOS or not

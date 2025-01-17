@@ -1,16 +1,21 @@
-library double_back_to_exit;
-
-import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// Enum to define the modes for double back action
+enum DoubleBackMode {
+  pop,
+  doublePop;
+}
 
 class DoubleBackToExit extends StatefulWidget {
   const DoubleBackToExit({
     super.key,
     required this.snackBarMessage,
     required this.child,
+    this.onWillPop,
     this.onDoubleBack,
     this.doubleBackDuration = const Duration(milliseconds: 1350),
     this.snackbarTextAlign = TextAlign.center,
@@ -20,11 +25,15 @@ class DoubleBackToExit extends StatefulWidget {
     this.snackbarMargin,
     this.snackbarPadding,
     this.snackbarWidth,
-    this.enabled = true,
+    this.mode = DoubleBackMode.doublePop,
+    this.canPop = false,
+    this.allowExitOnIOS = false,
   });
+
   final Widget child;
   final String snackBarMessage;
-  final FutureOr<bool> Function()? onDoubleBack;
+  final VoidCallback? onWillPop;
+  final VoidCallback? onDoubleBack;
   final Duration doubleBackDuration;
   final TextStyle? snackbarTextStyle;
   final TextAlign snackbarTextAlign;
@@ -33,7 +42,12 @@ class DoubleBackToExit extends StatefulWidget {
   final EdgeInsets? snackbarMargin;
   final EdgeInsetsGeometry? snackbarPadding;
   final double? snackbarWidth;
-  final bool enabled;
+  final DoubleBackMode mode;
+  final bool canPop;
+  // This boolean flag is used to allow the app to exit on iOS.
+  // Note: Exiting an app programmatically on iOS is generally discouraged by Apple,
+  // and may result in the app being rejected from the App Store.
+  final bool allowExitOnIOS;
 
   @override
   State<DoubleBackToExit> createState() => _DoubleBackToExitState();
@@ -42,17 +56,29 @@ class DoubleBackToExit extends StatefulWidget {
 class _DoubleBackToExitState extends State<DoubleBackToExit> {
   DateTime? currentBackPressTime;
 
+  // Handler for single back press
+  void handlerPop() {
+    if (widget.onWillPop != null) widget.onWillPop!();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // * Web
-    if (kIsWeb || !widget.enabled) return widget.child;
+    if (kIsWeb) return widget.child;
 
-    Future<bool> onWillPop() async {
+    // Handler for double back press
+    void handlerDoublePop() {
+      final canPop = Navigator.canPop(context);
+
+      // Prevent exit on iOS if not allowed
+      if (io.Platform.isIOS && !canPop && !widget.allowExitOnIOS) return;
+
       DateTime now = DateTime.now();
 
+      // Show snackbar if double back press duration is not met
       if (currentBackPressTime == null ||
           now.difference(currentBackPressTime!) > widget.doubleBackDuration) {
         currentBackPressTime = now;
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             widget.snackBarMessage,
@@ -70,31 +96,30 @@ class _DoubleBackToExitState extends State<DoubleBackToExit> {
           padding: widget.snackbarPadding,
           width: widget.snackbarWidth,
         ));
-        return false;
+        return;
       }
 
-      if (widget.onDoubleBack != null) return await widget.onDoubleBack!();
+      // Call onDoubleBack callback if provided
+      if (widget.onDoubleBack != null) return widget.onDoubleBack!();
 
-      return true;
+      // Pop the current route if possible
+      if (canPop) return Navigator.pop(context);
+
+      // Exit the app on Android
+      if (io.Platform.isAndroid) {
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      } else {
+        io.exit(0);
+      }
     }
 
-    // * Android
-    if (Platform.isAndroid) {
-      return WillPopScope(
-        onWillPop: onWillPop,
-        child: widget.child,
-      );
-    }
-
-    // * IOS
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
-      child: GestureDetector(
-        onHorizontalDragUpdate: (details) async {
-          if (details.delta.dx > 8) await onWillPop();
-        },
-        child: widget.child,
-      ),
+    return PopScope(
+      canPop: widget.canPop,
+      onPopInvokedWithResult: (didPop, result) => switch (widget.mode) {
+        DoubleBackMode.doublePop => handlerDoublePop(),
+        DoubleBackMode.pop => handlerPop(),
+      },
+      child: widget.child,
     );
   }
 }
