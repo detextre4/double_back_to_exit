@@ -25,3 +25,7 @@
 
 * updated flutter sdk version (3.27.2)
 * added `bool` check if to allow exit app on IOS or not
+
+## 1.2.1
+
+* updated README.md
