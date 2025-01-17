@@ -18,7 +18,7 @@ In your Flutter project, add the `double_back_to_exit` dependency to your `pubsp
 
 ```yaml
 dependencies: 
-  double_back_to_exit: ^1.0.0
+  double_back_to_exit: ^1.2.0
 ```
 
 ## Usage
