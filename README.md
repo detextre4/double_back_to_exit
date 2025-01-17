@@ -38,6 +38,18 @@ DoubleBackToExitWidget(
 )
 ```
 
+### Android Configuration
+
+To ensure the double back press functionality works correctly on Android, add the following line to the <application> tag in your AndroidManifest.xml file:
+
+```xml
+<application
+    android:enableOnBackInvokedCallback="true"
+    ... >
+    <!-- Other configurations -->
+</application>
+```
+
 ## Example
 
 For a complete example, see the [example](https://github.com/example/example) folder.
