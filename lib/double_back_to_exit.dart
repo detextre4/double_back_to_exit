@@ -61,57 +61,57 @@ class _DoubleBackToExitState extends State<DoubleBackToExit> {
     if (widget.onWillPop != null) widget.onWillPop!();
   }
 
+  // Handler for double back press
+  void handlerDoublePop() {
+    final canPop = Navigator.canPop(context);
+
+    // Prevent exit on iOS if not allowed
+    if (io.Platform.isIOS && !canPop && !widget.allowExitOnIOS) return;
+
+    DateTime now = DateTime.now();
+
+    // Show snackbar if double back press duration is not met
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > widget.doubleBackDuration) {
+      currentBackPressTime = now;
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          widget.snackBarMessage,
+          textAlign: widget.snackbarTextAlign,
+          style: widget.snackbarTextStyle ??
+              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+        ),
+        duration: widget.doubleBackDuration,
+        backgroundColor: widget.snackbarBackgroundColor,
+        behavior: widget.snackbarBehavior,
+        margin: widget.snackbarMargin,
+        padding: widget.snackbarPadding,
+        width: widget.snackbarWidth,
+      ));
+      return;
+    }
+
+    // Call onDoubleBack callback if provided
+    if (widget.onDoubleBack != null) return widget.onDoubleBack!();
+
+    // Pop the current route if possible
+    if (canPop) return Navigator.pop(context);
+
+    // Exit the app on Android
+    if (io.Platform.isAndroid) {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else {
+      io.exit(0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) return widget.child;
-
-    // Handler for double back press
-    void handlerDoublePop() {
-      final canPop = Navigator.canPop(context);
-
-      // Prevent exit on iOS if not allowed
-      if (io.Platform.isIOS && !canPop && !widget.allowExitOnIOS) return;
-
-      DateTime now = DateTime.now();
-
-      // Show snackbar if double back press duration is not met
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime!) > widget.doubleBackDuration) {
-        currentBackPressTime = now;
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            widget.snackBarMessage,
-            textAlign: widget.snackbarTextAlign,
-            style: widget.snackbarTextStyle ??
-                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-          ),
-          duration: widget.doubleBackDuration,
-          backgroundColor: widget.snackbarBackgroundColor,
-          behavior: widget.snackbarBehavior,
-          margin: widget.snackbarMargin,
-          padding: widget.snackbarPadding,
-          width: widget.snackbarWidth,
-        ));
-        return;
-      }
-
-      // Call onDoubleBack callback if provided
-      if (widget.onDoubleBack != null) return widget.onDoubleBack!();
-
-      // Pop the current route if possible
-      if (canPop) return Navigator.pop(context);
-
-      // Exit the app on Android
-      if (io.Platform.isAndroid) {
-        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      } else {
-        io.exit(0);
-      }
-    }
 
     return PopScope(
       canPop: widget.canPop,
