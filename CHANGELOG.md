@@ -29,3 +29,10 @@
 ## 1.2.1
 
 * updated README.md
+
+## 1.3.0
+
+* Added `example/` directory with a complete demo app
+* Example includes navigation with GoRouter to test double back behavior
+* Demonstrates all widget properties and customization options
+* Fixed README.md links to point to correct repository
